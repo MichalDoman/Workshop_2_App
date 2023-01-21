@@ -8,16 +8,33 @@ USER = 'postgres'
 PASSWORD = 'coderslab'
 DATABASE = 'test_db'
 
+
+def create_user(cursor, username, password):
+    user = User(username, password)
+    users = list_users(cursor)
+    if user in users:
+        print('This username already exists!')
+    else:
+        if len(password) >= 8:
+            user.save_to_db(cursor)
+        else:
+            print('Password is too short!')
+
+
 def delete_user(cursor, username, password):
     user = User.load_user_by_username(cursor, username)
     print(user)
     if check_password(password, user.hashed_password) and username == user.username:
         user.delete(cursor)
         print(user.delete(cursor))
+
+
 def list_users(cursor):
     all_users = User.load_all_users(cursor)
     for user in all_users:
         print(user)
+    return all_users
+
 
 def main():
     try:
@@ -34,18 +51,24 @@ def main():
         parser.add_argument("-e", "--edit", help="edit user info")
         args = parser.parse_args()
 
-        # if args.username:
-        #     pass
-        # elif args.password:
-        #     pass
-        # elif args.new_pass:
-        #     pass
+        if args.username and args.password:
+            create_user(cursor, args.username, args.password)
+
+        elif args.password:
+            pass
+
+        elif args.new_pass:
+            pass
+
         if args.list:
             list_users(cursor)
+
         elif args.username and args.password and args.delete:
             delete_user(cursor, args.username, args.password)
-        # elif args.edit:
-        #     pass
+
+        elif args.edit:
+            pass
+
         else:
             parser.print_help()
 
