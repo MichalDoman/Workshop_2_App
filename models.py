@@ -1,11 +1,5 @@
 from clcrypto import hash_password
-from psycopg2 import connect, OperationalError
 from datetime import date
-
-HOST = 'localhost'
-USER = 'postgres'
-PASSWORD = 'coderslab'
-DATABASE = 'test_db'
 
 
 class User:
@@ -89,8 +83,9 @@ class User:
         return True
 
     def __str__(self):
-        user_info = f'"{self.username}" has id of "{self._id}" and their hashed password is "{self._hashed_password}"'
+        user_info = f'"{self.username}" has id of "{self._id}" and their hashed password is "{self._hashed_password}".'
         return user_info
+
 
 class Message:
     def __init__(self, from_id="", to_id="", text=""):
@@ -99,7 +94,6 @@ class Message:
         self.to_id = to_id
         self.creation_date = None
         self.text = text
-
 
     @property
     def id(self):
@@ -139,28 +133,6 @@ class Message:
             messages.append(load_message)
         return messages
 
-def main():
-    try:
-        cnx = connect(host=HOST, user=USER, password=PASSWORD, database=DATABASE)
-        cnx.autocommit = True
-        cursor = cnx.cursor()
-
-        user_1 = User('user_1', 'password_1')
-        # user_1.save_to_db(cursor)
-        user_2 = User('user_2', 'password_2')
-        # user_2.save_to_db(cursor)
-        u = user_1.load_user_by_username(cursor, 'user_2')
-        print(u)
-
-        message_1 = Message('4', '5', 'Hi, how are you?')
-        # message_1.save_to_db(cursor)
-        all_messages = message_1.load_all_messages(cursor)
-        print(all_messages)
-
-        cursor.close()
-    except OperationalError:
-        print('There was an error connecting to the server!')
-
-
-if __name__ == '__main__':
-    main()
+    def __str__(self):
+        message_info = f'Message "{self.text}", was send on {self.creation_date} from user with id "{self.from_id}" to user with id "{self.to_id}".'
+        return message_info

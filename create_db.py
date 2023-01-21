@@ -48,8 +48,8 @@ def main():
                    'to_id INT NOT NULL,' \
                    'creation_date TIMESTAMP,' \
                    'text TEXT,' \
-                   'FOREIGN KEY(from_id) REFERENCES Users(id),' \
-                   'FOREIGN KEY(to_id) REFERENCES Users(id));'
+                   'FOREIGN KEY(from_id) REFERENCES Users(id) ON DELETE CASCADE,' \
+                   'FOREIGN KEY(to_id) REFERENCES Users(id) ON DELETE CASCADE);'
     create_table(sql_messages, 'test_db')
 
 
